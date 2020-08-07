@@ -9,8 +9,8 @@ by digIT20
 Once you see `Running target/release/hackIT` you can use the project.
 
 ## USAGE
-- Enter localhost:1337 in your browser
-- Enter localhost:1337/completions to test db
+- Enter localhost:8000 in your browser
+- Enter localhost:8000/records to test db
 - Enter localhost:8080 to administrate the db
 
 ## CONFIG
