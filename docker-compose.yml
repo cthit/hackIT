@@ -8,8 +8,8 @@ services:
             - /usr/src/app/target
             - ./hackIT:/usr/src/app
         
-    postgresql:
-        build: hackIT_db/.
+    postgresql: 
+        image: postgres:12.3-alpine
         environment:
             - POSTGRES_USER
             - POSTGRES_PASSWORD
