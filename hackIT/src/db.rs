@@ -1,0 +1,20 @@
+use diesel::{self, result::QueryResult, prelude::*};
+use std::time::SystemTime;
+
+use crate::schema::records;
+use crate::schema::records::dsl::{records as all_records};
+
+#[table_name="records"]
+#[derive(serde::Serialize, Queryable, Insertable, Debug, Clone)]
+pub struct Record {
+    pub id: i32,
+    pub name: String,
+    pub challenge_id: String,
+    pub toc: SystemTime,
+}
+
+impl Record {
+    pub fn all(conn: &PgConnection) -> QueryResult<Vec<Record>> {
+        all_records.order(records::id.desc()).load::<Record>(conn)
+    }
+}

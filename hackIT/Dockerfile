@@ -2,7 +2,11 @@ FROM rust:1.44.1
 
 WORKDIR /usr/src/app
 
-# CMD cargo run
+RUN apt update -y && apt upgrade -y
+RUN apt install -y wait-for-it
 
-RUN cargo install systemfd cargo-watch
-CMD systemfd --no-pid -s http::0.0.0.0:3000 -- cargo watch -x run
+RUN rustup default nightly
+RUN cargo install cargo-watch
+RUN cargo install diesel_cli --no-default-features --features postgres
+
+CMD bash -c "wait-for-it postgresql:5432 -q -- diesel migration run && cargo watch -x run"
