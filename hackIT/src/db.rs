@@ -1,19 +1,8 @@
 use diesel::{self, result::QueryResult, prelude::*};
 use std::time::SystemTime;
 
-mod schema {
-    table! {
-        records {
-            id -> Int4,
-            name -> Text,
-	    challenge_id -> Text,
-            toc -> Timestamp,
-        }
-    }
-}
-
-use self::schema::records;
-use self::schema::records::dsl::{records as all_records};
+use crate::schema::records;
+use crate::schema::records::dsl::{records as all_records};
 
 #[table_name="records"]
 #[derive(serde::Serialize, Queryable, Insertable, Debug, Clone)]

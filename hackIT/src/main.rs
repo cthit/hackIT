@@ -9,6 +9,7 @@ use rocket_contrib::templates::Template;
 
 pub mod db;
 pub mod challenge;
+mod schema;
 
 use crate::challenge::{Challenges,load_challenges};
 use crate::db::{Record};
