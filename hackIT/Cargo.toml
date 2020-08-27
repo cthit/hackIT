@@ -21,7 +21,7 @@ tera = "1.4"
 # For gamma
 oauth2 = "3.0"
 reqwest = { version = "0.10", features = ["json","blocking"] }
-futures = "0.3.5"
+
 
 
 [dependencies.rocket_contrib]
