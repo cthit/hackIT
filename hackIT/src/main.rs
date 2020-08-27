@@ -64,14 +64,28 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
         _       => "You are not logged in...".to_string(),
     };
 
-    let ctx = Context{ name : "Yoda", auth : tkn, auth_url : &chs.auth_url};
+    let (auth_url,csrf_state) = gamma::gen_auth_url(&chs.oauth);
+
+
+    let ctx = Context{ name : "Yoda", auth : tkn, auth_url : &auth_url};
+    cookies.add_private(Cookie::new("csrf_state",csrf_state.secret().to_string()));
     
     Template::render("index",&ctx)
 }
 
 #[get("/auth/gamma?<code>&<state>")]
 fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,reqwest::Error> {
-    
+
+    let csrf_state = match cookies.get_private("csrf_state") {
+        Some(c) => c.value().to_string(),
+        _       => return Ok(Redirect::to("/")),
+
+    };
+
+    if csrf_state != state.to_string() {
+        return Ok(Redirect::to("/"))
+    }
+
     let access_token = gamma::validate_code(&code.to_string(),&chs.oauth);
 
     // Pull username ( nick ) from gamma
@@ -99,18 +113,16 @@ fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, stat
 struct ConstState{
     challenges : Challenges,
     oauth      : oauth2::basic::BasicClient,
-    auth_url   : String,
 }
 
 fn main() {
 
     let gamma_client = gamma::init_gamma();
-    let auth_url = gamma::gen_auth_url(&gamma_client);
 
     rocket::ignite()
 	.attach(Template::fairing())
 	.attach(UserRecordsConn::fairing())
-	.manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client, auth_url : auth_url})
+	.manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
 	.mount("/", routes![index,records,challenges,gamma_auth]).launch();
 }
 

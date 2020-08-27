@@ -15,12 +15,12 @@ pub fn validate_code(code : &str, client : &BasicClient) -> String{
         .request(http_client).unwrap().access_token().secret().to_string()
 }
 
-pub fn gen_auth_url(client : &BasicClient) -> String {
-    let (authorize_url, _csrf_state) = client
+pub fn gen_auth_url(client : &BasicClient) -> (String,oauth2::CsrfToken) {
+    let (authorize_url, csrf_state) = client
         .authorize_url(CsrfToken::new_random)
         .url();
     
-    authorize_url.to_string()
+    (authorize_url.to_string(),csrf_state)
 }
 
 
