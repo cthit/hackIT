@@ -3,14 +3,17 @@
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate diesel;
 
-use serde::Serialize;
+use std::collections::HashMap;
+use std::env;
+
+use serde::{Deserialize,Serialize};
 use rocket::State;
 
 use rocket::http::{Cookie, Cookies, RawStr};
 use rocket::response::{Flash, Redirect};
 use rocket_contrib::templates::Template;
 
-
+use futures::executor::block_on;
 use oauth2::basic::BasicClient;
 
 use oauth2::reqwest::http_client;
@@ -18,7 +21,8 @@ use oauth2::{
     AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
     TokenResponse, TokenUrl,
 };
-use std::env;
+
+use reqwest::header::AUTHORIZATION;
 
 pub mod db;
 pub mod challenge;
@@ -67,7 +71,7 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
     auth_url : &'a str,
     }
 
-    let tkn = match cookies.get_private("gamma_access_token") {
+    let tkn = match cookies.get_private("nick") {
         Some(c) => c.value().to_string(),
         _       => "You are not logged in...".to_string(),
     };
@@ -78,13 +82,27 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
 }
 
 #[get("/auth/gamma?<code>&<state>")]
-fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Redirect {
+fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,reqwest::Error> {
     let token = chs.oauth
         .exchange_code(AuthorizationCode::new(code.to_string()))
         .request(http_client).unwrap();
 
-    cookies.add_private(Cookie::new("gamma_access_token",token.access_token().secret().to_string()));
-    Redirect::to("/")
+    #[derive(Deserialize)]
+    struct User {
+        nick : String,
+    }
+
+    let client = reqwest::blocking::Client::new();
+    let resp : User = client.get("http://gamma-backend:8081/api/users/me")
+        .bearer_auth(token.access_token().secret().to_string())
+        .send()?.json()?;
+
+    
+
+    let username = resp.nick;
+ 
+    cookies.add_private(Cookie::new("nick",username.to_string()));
+    Ok(Redirect::to("/"))
 
 }
 
