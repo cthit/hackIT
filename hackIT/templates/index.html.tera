@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <title>CODE<>IT</title>
   </head>
   <body>
-    <h1>Hello {{name}}</h1> 
+    <h1>Welcome to hack_IT!</h1>
+    <p>to acces the challenges, please log in on gamma!</p>
+    <button type="button">Login</button>
   </body>
  </html>

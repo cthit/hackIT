@@ -3,8 +3,10 @@
   <head></head>
   <body>
     <h1> Here are some challenges </h1>
+    <ul>
     {% for challenge in names %}
-    {{ challenge }}
+    <li>{{ challenge }}</li>
     {% endfor %}
+    </ul>
   </body>
 </html>

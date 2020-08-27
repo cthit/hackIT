@@ -6,6 +6,7 @@
 use serde::Serialize;
 use rocket::State;
 use rocket_contrib::templates::Template;
+use rocket_contrib::serve::StaticFiles;
 
 pub mod db;
 pub mod challenge;
@@ -64,7 +65,9 @@ fn main() {
     rocket::ignite()
 	.attach(Template::fairing())
 	.attach(UserRecordsConn::fairing())
-	.manage(ConstState{ challenges : load_challenges("test_challenges") })
-	.mount("/", routes![index,records,challenges]).launch();
-}
+    .manage(ConstState{ challenges : load_challenges("test_challenges") })
+    .mount("/", routes![index,records,challenges])
+    .mount("/static", StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
+    .launch();
 
+}
