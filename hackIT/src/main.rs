@@ -3,7 +3,7 @@
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate diesel;
 
-use serde::{Serialize};
+use serde::Serialize;
 use rocket::State;
 
 use rocket::http::{Cookie, Cookies, RawStr};
