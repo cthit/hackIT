@@ -18,6 +18,11 @@ syn = "1.0.38"
 toml = "0.5.3"
 tera = "1.4"
 
+# For gamma
+oauth2 = "3.0"
+reqwest = { version = "0.10", features = ["json","blocking"] }
+
+
 
 [dependencies.rocket_contrib]
 version = "0.4.5"
