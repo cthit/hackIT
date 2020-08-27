@@ -3,11 +3,12 @@
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate diesel;
 
-use serde::{Deserialize,Serialize};
+use serde::{Serialize};
 use rocket::State;
 
 use rocket::http::{Cookie, Cookies, RawStr};
 use rocket::response::{Flash, Redirect};
+use rocket::request::FlashMessage;
 use rocket_contrib::templates::Template;
 
 
@@ -74,36 +75,24 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
 }
 
 #[get("/auth/gamma?<code>&<state>")]
-fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,reqwest::Error> {
+fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,Flash<Redirect>> {
 
     let csrf_state = match cookies.get_private("csrf_state") {
         Some(c) => c.value().to_string(),
-        _       => return Ok(Redirect::to("/")),
+        _       => return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #002. Please contact digit@chalmers.it")),
 
     };
 
     if csrf_state != state.to_string() {
-        return Ok(Redirect::to("/"))
+        return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #003. Please contact digit@chalmers.it"))
     }
 
     let access_token = gamma::validate_code(&code.to_string(),&chs.oauth);
 
-    // Pull username ( nick ) from gamma
-    
-    #[derive(Deserialize)]
-    struct User {
-        nick : String,
-    }
-
-    let client = reqwest::blocking::Client::new();
-    let resp : User = client.get("http://gamma-backend:8081/api/users/me")
-        .bearer_auth(access_token)
-        .send()?.json()?;
-
-
-    let username = resp.nick;
-
-    // Set as cookie and return to index
+    let username = match gamma::get_nick(&access_token) {
+        Ok(nick) => nick,
+        _        => return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #004. Please contact digit@chalmers.it"))
+    };
  
     cookies.add_private(Cookie::new("nick",username));
     Ok(Redirect::to("/"))

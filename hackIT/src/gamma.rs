@@ -1,9 +1,9 @@
 use std::env;
 
+use serde::{Deserialize};
+
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::http_client;
-
-
 use oauth2::{
     AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl,
     TokenResponse, TokenUrl,
@@ -21,6 +21,21 @@ pub fn gen_auth_url(client : &BasicClient) -> (String,oauth2::CsrfToken) {
         .url();
     
     (authorize_url.to_string(),csrf_state)
+}
+
+pub fn get_nick(access_token : &str) -> Result<String,reqwest::Error> {
+    #[derive(Deserialize)]
+    struct User {
+        nick : String,
+    }
+
+    let client = reqwest::blocking::Client::new();
+    let resp : User = client.get("http://gamma-backend:8081/api/users/me")
+        .bearer_auth(access_token)
+        .send()?.json()?;
+
+
+    Ok(resp.nick)
 }
 
 
