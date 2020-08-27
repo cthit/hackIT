@@ -8,7 +8,7 @@ use rocket::State;
 
 use rocket::http::{Cookie, Cookies, RawStr};
 use rocket::response::{Flash, Redirect};
-use rocket::request::FlashMessage;
+use rocket::request::{Form,FlashMessage};
 use rocket_contrib::templates::Template;
 
 
@@ -17,7 +17,7 @@ mod challenge;
 mod schema;
 mod gamma;
 
-use crate::challenge::{Challenges,load_challenges};
+use crate::challenge::{Challenge,Challenges,load_challenges};
 use crate::db::{Record};
 
 #[database("hackit")]
@@ -39,16 +39,63 @@ fn records( conn : UserRecordsConn ) -> Template {
 }
 
 #[get("/challenges")]
-fn challenges(chs : State<ConstState>) -> Template {
+fn challenges(chs : State<ConstState>, flash: Option<FlashMessage>) -> Template {
 
     #[derive(Serialize)]
     struct Context<'a> {
-	names : Vec<&'a String>,
+        names : Vec<&'a String>,
+        flash : Option<String>,
     }
     
-    let ctx = Context { names : chs.challenges.keys().collect() };
+    let ctx = Context { names : chs.challenges.keys().collect(), flash : flash.map(|x| x.msg().to_string())};
     Template::render("challenges",&ctx)
 }
+
+#[get("/challenges/<id>")]
+fn get_challenge(cs : State<ConstState>, id : &RawStr, flash: Option<FlashMessage>) -> Option<Template> {
+    let challenge = cs.challenges.get(&id.to_string())?;
+
+    #[derive(Serialize)]
+    struct Context<'a> {
+        challenge : &'a Challenge,
+        flash     : Option<String>,
+    };
+
+    let ctx = Context { challenge : challenge, flash : flash.map(|x| x.msg().to_string())};
+    Some(Template::render("detail_view",&ctx))
+}
+
+#[derive(FromForm)]
+struct UserAnswer {
+    ans : String,
+}
+
+#[post("/challenges/<id>",data = "<answer>")]
+fn check_answer(cs : State<ConstState>, mut cookies : Cookies, id : &RawStr, answer : Form<UserAnswer>) -> Option<Flash<Redirect>>{
+    let qa_selector = cookies.get_private("challenge_selector")?.value().parse::<u32>().unwrap_or(0);
+    let challenge = cs.challenges.get(&id.to_string())?;
+
+    let (_,a) = challenge::get_qa(qa_selector,&challenge);
+
+    if a == &answer.into_inner().ans {
+        Some(Flash::success(Redirect::to("/challenges/"),format!("Congratulation, you completed {}",challenge.name)))
+    }
+    else {
+        Some(Flash::error(Redirect::to(format!("/challenges/{}/",id.to_string())),"Sorry, but that anwser is incorrect"))
+    }
+
+}
+
+#[get("/challenges/<id>/scenario")]
+fn get_challenge_scenario(cs : State<ConstState>, mut cookies : Cookies, id : &RawStr) -> Option<String>{
+    let qa_selector = cookies.get_private("challenge_selector").unwrap().value().parse::<u32>().unwrap_or(0);
+    let challenge = cs.challenges.get(&id.to_string())?;
+
+    
+    let (q,_) = challenge::get_qa(qa_selector,&challenge);
+    Some(q.to_string())
+}
+
 
 #[get("/")]
 fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
@@ -93,8 +140,11 @@ fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, stat
         Ok(nick) => nick,
         _        => return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #004. Please contact digit@chalmers.it"))
     };
+
+    let challenge_qa_selector : u32 = username.as_bytes().into_iter().map(|x| x.count_ones()).sum();
  
     cookies.add_private(Cookie::new("nick",username));
+    cookies.add_private(Cookie::new("challenge_selector",format!("{}",challenge_qa_selector)));
     Ok(Redirect::to("/"))
 
 }
@@ -112,6 +162,6 @@ fn main() {
 	.attach(Template::fairing())
 	.attach(UserRecordsConn::fairing())
 	.manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
-	.mount("/", routes![index,records,challenges,gamma_auth]).launch();
+	.mount("/", routes![index,records,challenges,gamma_auth,get_challenge,get_challenge_scenario,check_answer]).launch();
 }
 

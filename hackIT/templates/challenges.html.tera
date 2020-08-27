@@ -2,9 +2,12 @@
 <html>
   <head></head>
   <body>
+    {% if flash %}
+        {{flash}}
+    {% endif %}
     <h1> Here are some challenges </h1>
     {% for challenge in names %}
-    {{ challenge }}
+    <a href="/challenges/{{ challenge }}">{{ challenge }}</a>
     {% endfor %}
   </body>
 </html>

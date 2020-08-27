@@ -21,11 +21,11 @@ use std::path::PathBuf;
 */
 #[derive(Serialize,Deserialize, Debug, PartialEq, Eq)]
 pub struct Challenge {
-    id: String,
-    lvl: u8,
-    name: String,
-    desc: String,
-    spec: String,
+    pub id: String,
+    pub lvl: u8,
+    pub name: String,
+    pub desc: String,
+    pub spec: String,
     scen: Vec<(String, String)>,
 }
 
@@ -100,11 +100,16 @@ fn load_qa_files(root: &PathBuf, qa_files: &[(String, String)]) -> Vec<(String, 
     qa
 }
 
+pub fn get_qa<'a>(selector : u32, ch : &'a Challenge) -> &(String,String){
+    let alts = ch.scen.len();
+    &ch.scen[(selector as usize) % alts]
+}
+
 /*
     Compares an answer with the answer given.
 */
 
-fn verify_answer(
+pub fn verify_answer(
     challenges: &Challenges,
     id: &str,
     scn_id: usize,
