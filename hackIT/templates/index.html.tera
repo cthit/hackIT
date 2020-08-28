@@ -8,7 +8,7 @@
     <div class="wrapper">
       <h1 id="background">Welcome to hack_IT!</h1>
       <p>to acces the challenges, please log in on gamma!</p>
-      <a href="{{auth}}"> [=LOGIN=] </a>
+      <a href="{{auth_url}}"> [=LOGIN=] </a>
     </div>
 
   </body>
