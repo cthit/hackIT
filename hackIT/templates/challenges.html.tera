@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head></head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+  </head>
   <body>
-    <h1> Here are some challenges </h1>
-    {% for challenge in names %}
-    {{ challenge }}
-    {% endfor %}
+    <div class="wrapper">
+      <h1> Here are some challenges </h1>
+      <ul>
+      {% for challenge in names %}
+      <li>{{ challenge }}</li>
+      {% endfor %}
+      </ul>
+    </div>
   </body>
 </html>
