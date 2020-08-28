@@ -4,11 +4,14 @@
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
   </head>
   <body>
+    {% if flash %}
+        {{flash}}
+    {% endif %}
     <div class="wrapper">
       <h1> Here are some challenges </h1>
       <ul>
       {% for challenge in names %}
-      <li>{{ challenge }}</li>
+        <li><a href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
       {% endfor %}
       </ul>
     </div>
