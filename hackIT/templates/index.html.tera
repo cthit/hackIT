@@ -6,9 +6,9 @@
   </head>
   <body>
     <div class="wrapper">
-      <h1>Welcome to hack_IT!</h1>
+      <h1 id="background">Welcome to hack_IT!</h1>
       <p>to acces the challenges, please log in on gamma!</p>
-      <a href="www.google.se"> [=LOGIN=] </a>
+      <a href="{{auth}}"> [=LOGIN=] </a>
     </div>
 
   </body>

@@ -20,16 +20,39 @@ nav{
 
 	padding-right: 10px;
 	padding-left: 10px;
-	background-color: #09CDDA;
+	background-color: #24464D;
 	height: 1000px;
+}
+.wrapper h1{
+	color: #09CDDA;
 }
 .wrapper p{
 	font-size: 16px;
+	color: #09CDDA;
 }
+
 
 .wrapper a{
 	text-decoration: none;
 }
 .wrapper a:visited{
 	color:blue;
+}
+.wrapper ul{
+	list-style-type: none;
+}
+.wrapper ul li{
+	margin: 20px;
+	padding: 10px;
+	border: 4px;
+	border-style: dashed;
+	border-color: #102225;
+	background-color: #09CDDA;
+	
+}
+
+#background {
+	color: #000000;
+	background-color:#09CDDA;
+	padding: 10px;
 }
