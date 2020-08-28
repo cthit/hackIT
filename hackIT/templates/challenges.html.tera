@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head></head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+  </head>
   <body>
     {% if flash %}
         {{flash}}
     {% endif %}
-    <h1> Here are some challenges </h1>
-    {% for challenge in names %}
-    <a href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %} >{{ challenge[0] }}</a>
-    {% endfor %}
+    <div class="wrapper">
+      <h1> Here are some challenges </h1>
+      <ul>
+      {% for challenge in names %}
+        <li><a href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
   </body>
 </html>

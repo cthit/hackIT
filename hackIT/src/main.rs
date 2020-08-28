@@ -10,6 +10,7 @@ use rocket::http::{Cookie, Cookies, RawStr, Status};
 use rocket::response::{Flash, Redirect, status};
 use rocket::request::{Form,FlashMessage,Request,FromRequest};
 use rocket_contrib::templates::Template;
+use rocket_contrib::serve::StaticFiles;
 
 
 mod db;
@@ -195,9 +196,11 @@ fn main() {
     let gamma_client = gamma::init_gamma();
 
     rocket::ignite()
-	.attach(Template::fairing())
-	.attach(UserRecordsConn::fairing())
-	.manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
-	.mount("/", routes![index,records,challenges,gamma_auth,get_challenge,get_challenge_scenario,check_answer]).launch();
-}
+	    .attach(Template::fairing())
+	    .attach(UserRecordsConn::fairing())
+      .manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
+	    .mount("/", routes![index,records,challenges,gamma_auth,get_challenge,get_challenge_scenario,check_answer])
+      .mount("/static", StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
+      .launch();
 
+}
