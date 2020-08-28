@@ -7,7 +7,7 @@ use serde::Serialize;
 
 use rocket::{State,Outcome};
 use rocket::http::{Cookie, Cookies, RawStr, Status};
-use rocket::response::{Flash, Redirect, status};
+use rocket::response::{Flash, Redirect};
 use rocket::request::{Form,FlashMessage,Request,FromRequest};
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
@@ -86,6 +86,11 @@ fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flas
     Template::render("challenges",&ctx)
 }
 
+#[get("/challenges", rank = 2)]
+fn challenges_redirect() -> Redirect {
+    Redirect::to("/")
+}
+
 #[get("/challenges/<id>")]
 fn get_challenge(cs : State<ConstState>, _user : User, id : &RawStr, flash: Option<FlashMessage>) -> Option<Template> {
     let challenge = cs.challenges.get(&id.to_string())?; 
@@ -98,6 +103,11 @@ fn get_challenge(cs : State<ConstState>, _user : User, id : &RawStr, flash: Opti
 
     let ctx = Context { challenge : challenge, flash : flash.map(|x| x.msg().to_string())};
     Some(Template::render("detail_view",&ctx))
+}
+
+#[get("/challenges/<_id>", rank = 2)]
+fn get_challenge_redirect(_id : &RawStr) -> Redirect {
+    Redirect::to("/")
 }
 
 #[derive(FromForm)]
@@ -133,8 +143,17 @@ fn get_challenge_scenario(cs : State<ConstState>, user : User, id : &RawStr) -> 
     Some(q.to_string())
 }
 
+#[get("/challenges/<_id>/scenario", rank = 2)]
+fn get_challenge_scenario_redirect(_id : &RawStr) -> Redirect {
+    Redirect::to("/")
+}
 
 #[get("/")]
+fn index_redirect(_user:User) -> Redirect {
+    Redirect::to("/challenges")
+}
+
+#[get("/", rank = 2)]
 fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
 
     #[derive(Serialize)]
@@ -183,8 +202,15 @@ fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, stat
     cookies.add_private(Cookie::new("nick",username));
     cookies.add_private(Cookie::new("challenge_selector",format!("{}",challenge_qa_selector)));
     Ok(Redirect::to("/"))
-
 }
+
+#[get("/logout")]
+fn logout(mut cookies : Cookies) -> Redirect {
+    cookies.remove_private(Cookie::named("nick"));
+    cookies.remove_private(Cookie::named("challenge_selector"));
+    Redirect::to("/")
+}
+
 
 struct ConstState{
     challenges : Challenges,
@@ -199,7 +225,7 @@ fn main() {
 	    .attach(Template::fairing())
 	    .attach(UserRecordsConn::fairing())
       .manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
-	    .mount("/", routes![index,records,challenges,gamma_auth,get_challenge,get_challenge_scenario,check_answer])
+	    .mount("/", routes![index,index_redirect,records,challenges,challenges_redirect,gamma_auth,get_challenge,get_challenge_redirect,get_challenge_scenario,get_challenge_scenario_redirect,check_answer,logout])
       .mount("/static", StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
       .launch();
 
