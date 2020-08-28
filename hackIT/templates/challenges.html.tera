@@ -7,7 +7,7 @@
     {% endif %}
     <h1> Here are some challenges </h1>
     {% for challenge in names %}
-    <a href="/challenges/{{ challenge }}">{{ challenge }}</a>
+    <a href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %} >{{ challenge[0] }}</a>
     {% endfor %}
   </body>
 </html>

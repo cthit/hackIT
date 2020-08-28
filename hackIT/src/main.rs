@@ -4,11 +4,11 @@
 #[macro_use] extern crate diesel;
 
 use serde::Serialize;
-use rocket::State;
 
-use rocket::http::{Cookie, Cookies, RawStr};
-use rocket::response::{Flash, Redirect};
-use rocket::request::{Form,FlashMessage};
+use rocket::{State,Outcome};
+use rocket::http::{Cookie, Cookies, RawStr, Status};
+use rocket::response::{Flash, Redirect, status};
+use rocket::request::{Form,FlashMessage,Request,FromRequest};
 use rocket_contrib::templates::Template;
 
 
@@ -22,6 +22,36 @@ use crate::db::{Record};
 
 #[database("hackit")]
 struct UserRecordsConn(diesel::PgConnection);
+
+
+struct User {
+    name : String,
+    challenge_selector : u32,
+}
+
+impl<'a,'r> FromRequest<'a,'r> for User {
+
+    type Error = &'static str;
+
+    fn from_request(request: &'a Request<'r>) -> rocket::request::Outcome<Self,Self::Error>{
+        let maybe_nick = request.cookies().get_private("nick");
+        let maybe_cs   = request.cookies().get_private("challenge_selector");
+
+        if let (Some(nick_cookie),Some(cs_cookie)) = (maybe_nick,maybe_cs) {
+            let challenge_selector_parsed = cs_cookie.value()
+                .to_string()
+                .parse::<u32>();
+
+            if let Ok(challenge_selector) = challenge_selector_parsed{
+                return Outcome::Success(User{name : nick_cookie.value().to_string(), challenge_selector : challenge_selector})
+            }
+            return Outcome::Failure((Status::BadRequest,"Error proccessing session, please delete your cookies and try again"))
+        }
+        else{
+            Outcome::Forward(())
+        }
+    }
+}
 
 #[get("/records")]
 fn records( conn : UserRecordsConn ) -> Template {
@@ -39,21 +69,25 @@ fn records( conn : UserRecordsConn ) -> Template {
 }
 
 #[get("/challenges")]
-fn challenges(chs : State<ConstState>, flash: Option<FlashMessage>) -> Template {
+fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flash: Option<FlashMessage>) -> Template {
+
+    let completed = Record::get_completion_ids(&conn,&user.name).unwrap_or(vec![]);
+
+    let challenge_statuses = chs.challenges.keys().map(|x| (x,completed.contains(&x)) ).collect();
 
     #[derive(Serialize)]
     struct Context<'a> {
-        names : Vec<&'a String>,
+        names : Vec<(&'a String, bool)>,
         flash : Option<String>,
     }
     
-    let ctx = Context { names : chs.challenges.keys().collect(), flash : flash.map(|x| x.msg().to_string())};
+    let ctx = Context { names : challenge_statuses, flash : flash.map(|x| x.msg().to_string())};
     Template::render("challenges",&ctx)
 }
 
 #[get("/challenges/<id>")]
-fn get_challenge(cs : State<ConstState>, id : &RawStr, flash: Option<FlashMessage>) -> Option<Template> {
-    let challenge = cs.challenges.get(&id.to_string())?;
+fn get_challenge(cs : State<ConstState>, _user : User, id : &RawStr, flash: Option<FlashMessage>) -> Option<Template> {
+    let challenge = cs.challenges.get(&id.to_string())?; 
 
     #[derive(Serialize)]
     struct Context<'a> {
@@ -71,28 +105,30 @@ struct UserAnswer {
 }
 
 #[post("/challenges/<id>",data = "<answer>")]
-fn check_answer(cs : State<ConstState>, mut cookies : Cookies, id : &RawStr, answer : Form<UserAnswer>) -> Option<Flash<Redirect>>{
-    let qa_selector = cookies.get_private("challenge_selector")?.value().parse::<u32>().unwrap_or(0);
-    let challenge = cs.challenges.get(&id.to_string())?;
+fn check_answer(cs : State<ConstState>, conn : UserRecordsConn, user : User, id : &RawStr, answer : Form<UserAnswer>) -> Result<Flash<Redirect>,Status>{
 
-    let (_,a) = challenge::get_qa(qa_selector,&challenge);
+    let challenge = cs.challenges.get(&id.to_string()).ok_or(Status::NotFound)?;
+
+    let (_,a) = challenge::get_qa(user.challenge_selector,&challenge);
 
     if a == &answer.into_inner().ans {
-        Some(Flash::success(Redirect::to("/challenges/"),format!("Congratulation, you completed {}",challenge.name)))
+        let res = match Record::insert(&conn,&user.name,&challenge.id) {
+                    Ok(_) => Ok(Flash::success(Redirect::to("/challenges/"),format!("Congratulation, you completed {}",challenge.name))),
+                    Err(_) => Err(Status::InternalServerError),
+        };
+        return res
     }
     else {
-        Some(Flash::error(Redirect::to(format!("/challenges/{}/",id.to_string())),"Sorry, but that anwser is incorrect"))
+        Ok(Flash::error(Redirect::to(format!("/challenges/{}/",id.to_string())),"Sorry, but that anwser is incorrect"))
     }
 
 }
 
 #[get("/challenges/<id>/scenario")]
-fn get_challenge_scenario(cs : State<ConstState>, mut cookies : Cookies, id : &RawStr) -> Option<String>{
-    let qa_selector = cookies.get_private("challenge_selector").unwrap().value().parse::<u32>().unwrap_or(0);
+fn get_challenge_scenario(cs : State<ConstState>, user : User, id : &RawStr) -> Option<String>{
     let challenge = cs.challenges.get(&id.to_string())?;
 
-    
-    let (q,_) = challenge::get_qa(qa_selector,&challenge);
+    let (q,_) = challenge::get_qa(user.challenge_selector,&challenge);
     Some(q.to_string())
 }
 
