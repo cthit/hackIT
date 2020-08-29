@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <title>CODE<>IT</title>
+  </head>
+  <body>
+    {% block flash %}{% endblock flash %}
+    <nav>
+      <div id = "title">
+        <h1>HACK_IT</h1>
+      </div>
+      <a href="index.html.tera"> [LOGIN]</a>
+      <div></div>
+    </nav>
+    <div class="wrapper">
+      {% block wrapper %}{% endblock wrapper %}
+    </div>
+
+  </body>
+ </html>

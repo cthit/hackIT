@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head></head>
-  <body>
-    {% if flash %}
+{% extends "base" %}
+{% block flash %}
+   {% if flash %}
         {{flash}}
     {% endif %}
-    <h1> {{challenge.name}} </h1>
+{% endblock flash %}
+
+
+{% block wrapper %}
+<h1> {{challenge.name}} </h1>
     <p>{{challenge.desc}} </p>
     <p>{{challenge.spec}} </p>
     <a href="/challenges/{{challenge.id}}/scenario"> link to question input </a>
@@ -13,5 +15,4 @@
         <input type="text" name="ans">
         <input type="submit" value="(Submit)">
     </form>
-  </body>
-</html>
+{% endblock wrapper %}
