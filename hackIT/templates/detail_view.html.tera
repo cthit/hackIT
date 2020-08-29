@@ -5,6 +5,9 @@
     {% endif %}
 {% endblock flash %}
 
+{% block back %}
+<a href="/challenges"> [ <- ] </a>
+{% endblock back %}
 
 {% block wrapper %}
 <h1> {{challenge.name}} </h1>

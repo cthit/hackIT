@@ -21,10 +21,24 @@ nav h1{
 	font-family: Share Tech Mono;
 	font-size: 42px;
 }
+nav p {
+	font-size: 24px;
+	color: #09CDDA;
+	font-family: Share Tech Mono;
+	display: flex;
+}
+
+nav a {
+	margin: 0px;
+	padding: 0px;
+	font-family: Share Tech Mono;
+	text-decoration: none;
+	color: #04818a;
+	font-size: 24px;
+}
 nav a :hover{
 	color: #09CDDA;
 }
-
 
 a {
 	margin: 0px;
@@ -96,5 +110,18 @@ a :visited{
 	color: #000000;
 	background-color:#09CDDA;
 	padding: 10px;
+}
+.navtop{
+	background-color: hotpink;
+	height: 25px;
+	width: 100%;
+	margin-bottom: 10px;
+	display:flex;
+
+}
+.important-text{
+	color: #09CDDA;
+	font-family: Share Tech Mono;
+	font-size: 24px;
 }
 

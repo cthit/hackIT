@@ -10,9 +10,12 @@
       <div id = "title">
         <h1>HACK_IT</h1>
       </div>
-      <a href="index.html.tera"> [LOGIN]</a>
-      <div></div>
+      <div class ="navtop">
+        <a href="/logout"> [LOG OUT]</a>
+        <div class = "important-text">{{nick}}</div>
+      </div>
     </nav>
+    {% block back%}{% endblock back%}
     <div class="wrapper">
       {% block wrapper %}{% endblock wrapper %}
     </div>
