@@ -1,7 +1,7 @@
 {% extends "base" %}
 {% block flash %}
    {% if flash %}
-        {{flash}}
+        <h2>{{flash}}</h2>
     {% endif %}
 {% endblock flash %}
 
