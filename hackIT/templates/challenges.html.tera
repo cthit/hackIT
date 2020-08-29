@@ -9,7 +9,7 @@
   <h1> Here are some challenges </h1>
       <ul>
       {% for challenge in names %}
-        <li><a style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
       {% endfor %}
       </ul>
 {% endblock wrapper %}

@@ -107,10 +107,10 @@ a:hover{
 	border: 4px;
 	border-style: dashed;
 	border-color: #000000;
-	background-color: #09CDDA;
+	background-color: #2c5661;
 }
 .wrapper ul li:hover{
-	background-color: #182e33;
+	background-color: #09CDDA;
 }
 #background {
 	color: #000000;
@@ -129,5 +129,8 @@ a:hover{
 	color: #09CDDA;
 	font-family: Share Tech Mono;
 	font-size: 24px;
+}
+#challenge{
+	color:black;
 }
 
