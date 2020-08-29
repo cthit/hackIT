@@ -28,7 +28,7 @@ nav p {
 	display: flex;
 }
 
-nav a {
+/* nav a {
 	margin: 0px;
 	padding: 0px;
 	font-family: Share Tech Mono;
@@ -38,9 +38,9 @@ nav a {
 }
 nav a :hover{
 	color: #09CDDA;
-}
+} */
 
-a {
+a{
 	margin: 0px;
 	padding: 0px;
 	font-family: Share Tech Mono;
@@ -48,12 +48,12 @@ a {
 	color: #04818a;
 	font-size: 24px;
 }
-a :hover{
+a:visited{
+	color: #04818a;
+}
+a:hover{
 	color: #09CDDA;
 
-}
-a :visited{
-	color: #04818a;
 }
 #title {
 	height: 50px;
@@ -83,7 +83,7 @@ a :visited{
 
 }
 
-.wrapper a{
+/* .wrapper a{
 	text-decoration: none;
 	color: #04818a;
 	font-size: 24px;
@@ -93,18 +93,21 @@ a :visited{
 }
 .wrapper a:visited{
 	color: #04818a;
-}
+} */
 .wrapper ul{
 	list-style-type: none;
+	padding-left: 0px;
 }
 .wrapper ul li{
-	margin: 20px;
+	margin-bottom: 20px;
 	padding: 10px;
 	border: 4px;
 	border-style: dashed;
-	border-color: #102225;
+	border-color: #000000;
 	background-color: #09CDDA;
-	
+}
+.wrapper ul li:hover{
+	background-color: #182e33;
 }
 #background {
 	color: #000000;
@@ -112,7 +115,7 @@ a :visited{
 	padding: 10px;
 }
 .navtop{
-	background-color: hotpink;
+	background-color: #182e33;
 	height: 25px;
 	width: 100%;
 	margin-bottom: 10px;
