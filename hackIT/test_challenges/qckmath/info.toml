@@ -1,0 +1,32 @@
+id = "qckmath"
+lvl = 1
+name = "Teacher smurf needs assistance!"
+desc = '''
+    School is starting in smurf village, but due to frequent cat attacks there are a lack of teachers!
+    Teacher smurf wants to teach students to magic of the fibonacii series, but is too busy grading 6 other classes...
+    Can you help teacher smurf?
+    '''
+spec = '''
+    The nth fibonacci number is defined as:
+        F(0) = 0
+        F(1) = 1
+        F(n) = F(n-1) + F(n-2)
+
+    Given an interger n, your program must return the nth fibonacci number
+    example:
+        (input)
+        8
+        (output)
+        21
+    '''
+scen = [
+    ["1.q","1.a"],
+    ["2.q","2.a"],
+    ["3.q","3.a"],
+    ["4.q","4.a"],
+    ["5.q","5.a"],
+    ["6.q","6.a"],
+    ["7.q","7.a"],
+    ["8.q","8.a"],
+    ["9.q","9.a"],   
+]
