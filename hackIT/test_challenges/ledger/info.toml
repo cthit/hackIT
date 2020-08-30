@@ -1,0 +1,35 @@
+id = "ledger"
+lvl = 2
+name = "Accountant smurfs dilema"
+desc = '''
+    Good news: The annual smurf bar-crawl was a huge success!
+    Bad news: the smurf village is now in ruins...
+    Pappa smurf has asked accountant smurf to check if the procceds from the bars covers the damage claims, but accountant smurf is still hungover from the pub-crawl!
+    Can you build a program to save accountant smurf? 
+    '''
+spec = '''
+    Given a newline terminated list of transactions, calculate the net sum.
+    transactions defined by a "sign" folowed by a whole number, where the sign
+    dictates wether the transaction is positive or negative.
+    
+    example:
+        (input)
+        +503 -> profit of 503
+        -324 -> cost of 324
+        +200 -> profit of 200
+        (output)
+        379
+    '''
+scen = [
+    ["1.q","1.a"],
+    ["2.q","2.a"],
+    ["3.q","3.a"],
+    ["4.q","4.a"],
+    ["5.q","5.a"],
+    ["6.q","6.a"],
+    ["7.q","7.a"],
+    ["8.q","8.a"],
+    ["9.q","9.a"],   
+
+]
+
