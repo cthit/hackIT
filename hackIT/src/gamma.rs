@@ -38,7 +38,6 @@ pub fn get_nick(access_token : &str) -> Result<String,reqwest::Error> {
     Ok(resp.nick)
 }
 
-
 pub fn init_gamma() -> BasicClient {
     let gamma_client_id = ClientId::new(
         env::var("GAMMA_CLIENT_ID").expect("Missing the GAMMA_CLIENT_ID environment variable."),
@@ -47,10 +46,13 @@ pub fn init_gamma() -> BasicClient {
         env::var("GAMMA_CLIENT_SECRET")
             .expect("Missing the GAMMA_CLIENT_SECRET environment variable."),
     );
-    let auth_url = AuthUrl::new("http://localhost:8081/api/oauth/authorize".to_string())
-        .expect("Invalid authorization endpoint URL");
-    let token_url = TokenUrl::new("http://gamma-backend:8081/api/oauth/token".to_string())
-        .expect("Invalid token endpoint URL");
+    let auth_url = AuthUrl::new(
+        env::var("GAMMA_AUTH_URL").expect("Missing the GAMMA_AUTH_URL")
+    ).expect("Invalid authorization endpoint URL");
+
+    let token_url = TokenUrl::new(
+        env::var("GAMMA_TOKEN_URL").expect("Missing the GAMMA_TOKEN_URL")
+    ).expect("Invalid token endpoint URL");
 
     let client = BasicClient::new(
         gamma_client_id,

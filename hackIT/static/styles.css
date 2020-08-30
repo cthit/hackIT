@@ -11,7 +11,9 @@ nav{
 	height: 50px;
 	width: 100%;
 	margin-bottom: 10px;
+	margin-top: 15px;
 	display: flex;
+	align-items: flex-end;
 }
 nav h1{
 	margin:0px;
@@ -25,6 +27,7 @@ nav p {
 	font-family: Share Tech Mono;
 	display: flex;
 }
+
 h2{
 	color: red;
 	font-family: Share Tech Mono;
@@ -59,8 +62,11 @@ a:hover{
 }
 #title {
 	height: 50px;
-	width: 175px;
-	background-color: hotpink;
+	width: 240px;
+	margin-right: 12px;
+	color: #09CDDA;
+	display: flex;
+	align-items: flex-end;
 }
 
 
@@ -81,7 +87,7 @@ a:hover{
 }
 .wrapper p{
 	font-size: 24px;
-	color: #FFFFFF;
+	color: #CCC;
 }
 
 /* .wrapper a{
@@ -103,8 +109,9 @@ a:hover{
 	margin-bottom: 20px;
 	padding: 10px;
 	border: 4px;
-	border-style: dashed;
-	border-color: #000000;
+	border-style: solid;
+	border-color: #09cdda;
+	border-width: 1px;
 	background-color: #2c5661;
 }
 .wrapper ul li:hover{
@@ -121,7 +128,7 @@ a:hover{
 	width: 100%;
 	margin-bottom: 10px;
 	display:flex;
-
+	align-items: flex-end;
 }
 .important-text{
 	color: #09CDDA;
@@ -129,6 +136,23 @@ a:hover{
 	font-size: 24px;
 }
 #challenge{
-	color:black;
+	color:#CCC;
 }
 
+.flash{
+	display: inline-block;
+	padding: 5px 5px 5px 5px;
+	font-size: 2em;
+}
+
+#correct.flash {
+	background: #3dc816;
+}
+
+#false.flash {
+	color: #cc0000;
+}
+
+p{
+	white-space: pre-wrap;
+}
