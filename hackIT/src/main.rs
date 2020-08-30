@@ -74,16 +74,33 @@ fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flas
 
     let completed = Record::get_completion_ids(&conn,&user.name).unwrap_or(vec![]);
 
-    let challenge_statuses = chs.challenges.keys().map(|x| (x,completed.contains(&x)) ).collect();
+    let challenge_statuses : Vec<(&Challenge,bool)> = chs.challenges.values().map(|x| (x,completed.contains(&x.id)) ).collect();
+
+    let mut beginner : Vec<(&String, bool)> = vec![];
+    let mut intermediate : Vec<(&String, bool)> = vec![];
+    let mut expert : Vec<(&String, bool)> = vec![];
+
+    for (challenge,is_complete) in challenge_statuses {
+        match challenge.lvl {
+            1 => beginner.push((&challenge.id,is_complete)),
+            2 => intermediate.push((&challenge.id,is_complete)),
+            3 => expert.push((&challenge.id,is_complete)),
+            _ => ()
+        };
+    }
+
+
 
     #[derive(Serialize)]
     struct Context<'a> {
-        names : Vec<(&'a String, bool)>,
+        beginner : Vec<(&'a String, bool)>,
+        intermediate : Vec<(&'a String, bool)>,
+        expert : Vec<(&'a String, bool)>,
         flash : Option<String>,
         nick : String,
     }
     
-    let ctx = Context { names : challenge_statuses, flash : flash.map(|x| x.msg().to_string()), nick : user.name.to_string()};
+    let ctx = Context { beginner : beginner, intermediate : intermediate, expert : expert, flash : flash.map(|x| x.msg().to_string()), nick : user.name.to_string()};
     Template::render("challenges",&ctx)
 }
 
