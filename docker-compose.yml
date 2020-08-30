@@ -5,6 +5,8 @@ services:
         environment:
             - GAMMA_CLIENT_ID=id
             - GAMMA_CLIENT_SECRET=secret
+            - GAMMA_AUTH_URL=http://localhost:8081/api/oauth/authorize
+            - GAMMA_TOKEN_URL=http://gamma-backend:8081/api/oauth/token
         ports:
             - 8000:8000
         volumes:

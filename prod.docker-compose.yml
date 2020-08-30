@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+    hackit:
+        build: hackIT
+        environment:
+            - GAMMA_CLIENT_ID
+            - GAMMA_CLIENT_SECRET
+            - GAMMA_AUTH_URL
+            - GAMMA_TOKEN_URL
+        ports:
+            - 80:8000
+        networks:
+            - hackit
+        
+    postgresql: 
+        image: postgres:12.3-alpine
+        environment:
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB
+        networks:
+            - hackit
+
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
+        depends_on:
+            - postgresql
+        networks:
+            - hackit
