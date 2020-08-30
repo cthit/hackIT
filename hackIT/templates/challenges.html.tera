@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
-  </head>
-  <body>
-    {% if flash %}
+{% extends "base" %}
+{% block flash %}
+   {% if flash %}
         {{flash}}
     {% endif %}
-    <div class="wrapper">
-      <h1> Here are some challenges </h1>
+{% endblock flash %}
+
+{% block wrapper %}
+  <h1> Here are some challenges </h1>
       <ul>
       {% for challenge in names %}
-        <li><a href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
       {% endfor %}
       </ul>
-    </div>
-  </body>
-</html>
+{% endblock wrapper %}
+

@@ -80,9 +80,10 @@ fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flas
     struct Context<'a> {
         names : Vec<(&'a String, bool)>,
         flash : Option<String>,
+        nick : String,
     }
     
-    let ctx = Context { names : challenge_statuses, flash : flash.map(|x| x.msg().to_string())};
+    let ctx = Context { names : challenge_statuses, flash : flash.map(|x| x.msg().to_string()), nick : user.name.to_string()};
     Template::render("challenges",&ctx)
 }
 
@@ -99,9 +100,10 @@ fn get_challenge(cs : State<ConstState>, _user : User, id : &RawStr, flash: Opti
     struct Context<'a> {
         challenge : &'a Challenge,
         flash     : Option<String>,
+        nick : String,
     };
 
-    let ctx = Context { challenge : challenge, flash : flash.map(|x| x.msg().to_string())};
+    let ctx = Context { challenge : challenge, flash : flash.map(|x| x.msg().to_string()), nick : _user.name.to_string()};
     Some(Template::render("detail_view",&ctx))
 }
 

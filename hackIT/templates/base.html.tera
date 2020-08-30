@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <title>CODE<>IT</title>
+  </head>
+  <body>
+    <nav>
+      <div id = "title">
+        <h1>HACK_IT</h1>
+      </div>
+      <div class ="navtop">
+        <a style ="margin-right:10px;" href="/logout"> [LOG OUT]</a>
+        <div class = "important-text">{{nick}}</div>
+      </div>
+    </nav>
+    {% block back%}{% endblock back%}
+    <div class="wrapper">
+    {% block flash %}{% endblock flash %}
+
+    {% block wrapper %}{% endblock wrapper %}
+    </div>
+
+  </body>
+ </html>
