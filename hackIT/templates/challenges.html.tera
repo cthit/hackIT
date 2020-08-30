@@ -10,19 +10,19 @@
     <h2> Beginner </h2>
       <ul>
       {% for challenge in beginner %}
-        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+        <li><a id="challenge" style="display:block;" href="/challenges/{{ challenge[0] }}" > {{ challenge[0] }}{% if challenge[1] %}<span style="color: #00FF00"> [completed]</span>{% endif %}</a></li>
       {% endfor %}
       </ul>
     <h2> Intermediate </h2>
       <ul>
       {% for challenge in intermediate %}
-        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}"> {{ challenge[0] }} {% if challenge[1] %}<span style="color: #00FF00"> [completed]</span>{% endif %}</a></li>
       {% endfor %}
       </ul>
     <h2> Expert </h2>
       <ul>
       {% for challenge in expert %}
-        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}" {% if challenge[1] %} style="color:green" {% endif %}> {{ challenge[0] }}</a></li>
+        <li><a id="challenge" style="display:block" href="/challenges/{{ challenge[0] }}"> {{ challenge[0] }} {% if challenge[1] %}<span style="color: #00FF00"> [completed]</span>{% endif %}</a></li>
       {% endfor %}
       </ul>
 {% endblock wrapper %}
