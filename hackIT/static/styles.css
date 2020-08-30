@@ -133,3 +133,17 @@ a:hover{
 	color:white;
 }
 
+.flash{
+	display: inline-block;
+	padding: 5px 5px 5px 5px;
+	font-size: 2em;
+}
+
+#correct.flash {
+	background: #3dc816;
+}
+
+#false.flash {
+	color: #cc0000;
+}
+

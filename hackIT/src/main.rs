@@ -143,7 +143,7 @@ fn check_answer(cs : State<ConstState>, conn : UserRecordsConn, user : User, id 
 
     if a == &answer.into_inner().ans {
         let res = match Record::insert(&conn,&user.name,&challenge.id) {
-                    Ok(_) => Ok(Flash::success(Redirect::to("/challenges/"),format!("Congratulation, you completed {}",challenge.name))),
+                    Ok(_) => Ok(Flash::success(Redirect::to("/challenges/"),format!("You have completed {}, nice!",challenge.name))),
                     Err(_) => Err(Status::InternalServerError),
         };
         return res
