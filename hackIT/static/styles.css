@@ -11,7 +11,9 @@ nav{
 	height: 50px;
 	width: 100%;
 	margin-bottom: 10px;
+	margin-top: 15px;
 	display: flex;
+	align-items: flex-end;
 }
 nav h1{
 	margin:0px;
@@ -25,6 +27,7 @@ nav p {
 	font-family: Share Tech Mono;
 	display: flex;
 }
+
 h2{
 	color: red;
 	font-family: Share Tech Mono;
@@ -59,8 +62,11 @@ a:hover{
 }
 #title {
 	height: 50px;
-	width: 175px;
-	background-color: hotpink;
+	width: 240px;
+	margin-right: 12px;
+	color: #09CDDA;
+	display: flex;
+	align-items: flex-end;
 }
 
 
@@ -122,7 +128,7 @@ a:hover{
 	width: 100%;
 	margin-bottom: 10px;
 	display:flex;
-
+	align-items: flex-end;
 }
 .important-text{
 	color: #09CDDA;
