@@ -147,3 +147,6 @@ a:hover{
 	color: #cc0000;
 }
 
+p{
+	white-space: pre-wrap;
+}

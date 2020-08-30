@@ -12,10 +12,13 @@
 {% block wrapper %}
 <h1> {{challenge.name}} </h1>
     <p>{{challenge.desc}} </p>
+    <hr>
     <p>{{challenge.spec}} </p>
+    <hr>
     <a href="/challenges/{{challenge.id}}/scenario"> link to question input </a>
     <form method="post">
         <input type="text" name="ans">
         <input type="submit" value="(Submit)">
     </form>
+    <hr>
 {% endblock wrapper %}
