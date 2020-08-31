@@ -30,7 +30,7 @@ pub fn get_nick(access_token : &str) -> Result<String,reqwest::Error> {
     }
 
     let client = reqwest::blocking::Client::new();
-    let resp : User = client.get("http://gamma-backend:8081/api/users/me")
+    let resp : User = client.get(&format!("https://{}/api/users/me",env::var("GAMMA_ROOT").expect("env GAMMA_ROOT not set")))
         .bearer_auth(access_token)
         .send()?.json()?;
 
@@ -62,7 +62,9 @@ pub fn init_gamma() -> BasicClient {
     )
 
     .set_redirect_url(
-        RedirectUrl::new("http://localhost:8000/auth/gamma".to_string()).expect("Invalid redirect URL"),
+        RedirectUrl::new(
+                env::var("GAMMA_REDIRECT_URL").expect("Missing the GAMMA_REDIRECT_URL")
+        ).expect("Invalid redirect URL"),
     );
 
     return client;

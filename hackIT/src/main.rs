@@ -54,21 +54,6 @@ impl<'a,'r> FromRequest<'a,'r> for User {
     }
 }
 
-#[get("/records")]
-fn records( conn : UserRecordsConn ) -> Template {
-
-    let recs = Record::all(&conn).unwrap();
-
-    #[derive(Serialize)]
-    struct Context{
-	records : Vec<Record>,
-    }
-    
-    let ctx = Context{ records: recs };
-    
-    Template::render("records",&ctx)
-}
-
 #[get("/challenges")]
 fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flash: Option<FlashMessage>) -> Template {
 
@@ -198,17 +183,7 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
 
 #[get("/auth/gamma?<code>&<state>")]
 fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,Flash<Redirect>> {
-
-    let csrf_state = match cookies.get_private("csrf_state") {
-        Some(c) => c.value().to_string(),
-        _       => return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #002. Please contact digit@chalmers.it")),
-
-    };
-
-    if csrf_state != state.to_string() {
-        return Err(Flash::error(Redirect::to("/"),"Invalid auth request: Error #003. Please contact digit@chalmers.it"))
-    }
-
+    
     let access_token = gamma::validate_code(&code.to_string(),&chs.oauth);
 
     let username = match gamma::get_nick(&access_token) {
@@ -244,7 +219,7 @@ fn main() {
 	    .attach(Template::fairing())
 	    .attach(UserRecordsConn::fairing())
       .manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
-	    .mount("/", routes![index,index_redirect,records,challenges,challenges_redirect,gamma_auth,get_challenge,get_challenge_redirect,get_challenge_scenario,get_challenge_scenario_redirect,check_answer,logout])
+	    .mount("/", routes![index,index_redirect,challenges,challenges_redirect,gamma_auth,get_challenge,get_challenge_redirect,get_challenge_scenario,get_challenge_scenario_redirect,check_answer,logout])
       .mount("/static", StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
       .launch();
 

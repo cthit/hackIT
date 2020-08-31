@@ -9,6 +9,4 @@ RUN rustup default nightly
 RUN cargo install cargo-watch
 RUN cargo install diesel_cli --no-default-features --features postgres
 
-ADD . .
-
-CMD bash -c "wait-for-it postgresql:5432 -q -- diesel migration run && cargo watch -x run"
+CMD bash -c "wait-for-it postgresql:5432 -q -- diesel migration run && ROCKET_ENV=prod cargo watch -x run"

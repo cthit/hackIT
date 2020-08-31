@@ -1,31 +1,26 @@
-version: '3.7'
+version: '2'
 services:
     hackit:
         build: hackIT
         environment:
-            - GAMMA_CLIENT_ID
-            - GAMMA_CLIENT_SECRET
-            - GAMMA_AUTH_URL
-            - GAMMA_TOKEN_URL
+            - GAMMA_CLIENT_ID=JIBzJD4BPJi8wmSVP6RXR72geurIhgVMqsANuqlh6AHanyIzcng2iV8PgxYghqPSTYFYvCuztlw
+            - GAMMA_CLIENT_SECRET=cqLQJEWe2qeoWdgf5ppRZNkpytMjJfMmpUizWkrRIYZOh7Qdlsq3ElSK6fB6glIhkaDUl8uo4jB
+            - GAMMA_AUTH_URL=https://gamma.chalmers.it/api/oauth/authorize
+            - GAMMA_TOKEN_URL=https://gamma.chalmers.it/api/oauth/token
+            - GAMMA_ROOT=https://gamma.chalmers.it
+            - GAMMA_REDIRECT_URL=http://localhost:8000/auth/gamma
+            - DATABASE_URL=postgres://dockersucks:deargodgammawork64@postgresql/hackit
+            - ROCKET_DATABASES={hackit={url="postgres://dockersucks:deargodgammawork64@postgresql/hackit"}}
+        volumes:
+            - /usr/src/app
         ports:
-            - 80:8000
-        networks:
-            - hackit
+            - 8000:8000
         
     postgresql: 
         image: postgres:12.3-alpine
         environment:
-            - POSTGRES_USER
-            - POSTGRES_PASSWORD
-            - POSTGRES_DB
-        networks:
-            - hackit
-
-    adminer:
-        image: adminer
-        ports:
-            - 8080:8080
-        depends_on:
-            - postgresql
-        networks:
-            - hackit
+            - POSTGRES_USER=dockersucks
+            - POSTGRES_PASSWORD=deargodgammawork64
+            - POSTGRES_DB=hackit
+        volumes:
+            - /var/lib/postgresql/data
