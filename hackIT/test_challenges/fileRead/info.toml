@@ -1,0 +1,17 @@
+id = "fileRead"
+lvl = 1
+name = "digIT smurfs needs to read!"
+desc = '''
+The digIT smurfs store a lot of information in different files, but have forgotten how to read them! Help the digIT smurf
+to read the files!
+    '''
+spec = '''
+In java, there is a few different ways one can read.
+Try implementing a way to read the input file given so that the console (System) writes it in your
+IDE(integrated development enviroment) of choice. Having this done will help with future challenges!
+Useful link : https://www.geeksforgeeks.org/different-ways-reading-text-file-java/ 
+    
+    '''
+scen = [
+    ["1.q","1.a"],
+]
