@@ -9,7 +9,6 @@ body{
 nav{
 	background-color: #182e33;
 	height: 50px;
-	width: 100%;
 	margin-bottom: 10px;
 	margin-top: 15px;
 	display: flex;
@@ -28,8 +27,12 @@ nav p {
 	display: flex;
 }
 
+nav img{
+	width: 70px;
+}
+
 h2{
-	color: red;
+	color: #cc0000;
 	font-family: Share Tech Mono;
 }
 
