@@ -11,4 +11,4 @@ RUN cargo install diesel_cli --no-default-features --features postgres
 
 COPY . .
 
-CMD bash -c "wait-for-it postgresql:5432 -q -- diesel migration run && cargo watch -x run"
+CMD bash -c "wait-for-it postgresql:5432 -q -- diesel migration run && cargo watch -x 'run -- --release'"

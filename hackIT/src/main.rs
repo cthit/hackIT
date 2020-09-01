@@ -12,12 +12,13 @@ use rocket::request::{Form,FlashMessage,Request,FromRequest};
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
 
+use rand::prelude::*;
 
 mod db;
 mod challenge;
 mod schema;
-mod gamma;
 
+use std::collections::HashSet;
 use crate::challenge::{Challenge,Challenges,load_challenges};
 use crate::db::{Record};
 
@@ -72,9 +73,15 @@ fn records( conn : UserRecordsConn ) -> Template {
 #[get("/challenges")]
 fn challenges(chs : State<ConstState>, conn : UserRecordsConn, user : User, flash: Option<FlashMessage>) -> Template {
 
-    let completed = Record::get_completion_ids(&conn,&user.name).unwrap_or(vec![]);
+    let challenge_statuses : Vec<(&Challenge,bool)>;
+    if user.name == "anon"{
+        challenge_statuses = chs.challenges.values().map(|x| (x,false) ).collect();
+    }
+    else{
+        let completed = Record::get_completion_ids(&conn,&user.name).unwrap_or(vec![]);
+        challenge_statuses = chs.challenges.values().map(|x| (x,completed.contains(&x.id)) ).collect();
+    }
 
-    let challenge_statuses : Vec<(&Challenge,bool)> = chs.challenges.values().map(|x| (x,completed.contains(&x.id)) ).collect();
 
     let mut beginner : Vec<(&String, bool)> = vec![];
     let mut intermediate : Vec<(&String, bool)> = vec![];
@@ -173,6 +180,51 @@ fn index_redirect(_user:User) -> Redirect {
 }
 
 #[get("/", rank = 2)]
+fn index() -> Template {
+
+    #[derive(Serialize)]
+    struct Context{
+        group_name : Option<String>,
+    }
+
+    let ctx = Context{group_name : None};    
+    Template::render("index",&ctx)
+}
+
+#[get("/<pg>")]
+fn phadder_grupp(cs : State<ConstState>, pg : &RawStr) -> Option<Template> {
+    if !cs.groups.contains(&pg.to_string()) {
+        return None;
+    }
+    else {
+        #[derive(Serialize)]
+        struct Context{
+            group_name : String,
+        }
+        return Some(Template::render("index",&Context{group_name : pg.to_string()}))
+    }
+}
+
+#[get("/login/player")]
+
+fn login(mut cookies : Cookies) -> Redirect {
+    cookies.add_private(Cookie::new("nick","anon"));
+    cookies.add_private(Cookie::new("challenge_selector",format!("{}",rand::random::<u32>()) ));
+    Redirect::to("/challenges")
+}
+
+#[get("/login/<pg>")]
+fn login_group(cs : State<ConstState>,mut cookies : Cookies,pg : &RawStr) -> Option<Redirect> {
+    if !cs.groups.contains(&pg.to_string()) {
+        return None;
+    }
+    cookies.add_private(Cookie::new("nick",pg.to_string()));
+    cookies.add_private(Cookie::new("challenge_selector",format!("{}",rand::random::<u32>()) ));
+    Some(Redirect::to("/challenges"))
+}
+
+/*
+#[get("/", rank = 2)]
 fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
 
     #[derive(Serialize)]
@@ -196,6 +248,8 @@ fn index(chs : State<ConstState>, mut cookies: Cookies) -> Template {
     Template::render("index",&ctx)
 }
 
+*/
+/*
 #[get("/auth/gamma?<code>&<state>")]
 fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, state : &RawStr) -> Result<Redirect,Flash<Redirect>> {
 
@@ -222,6 +276,7 @@ fn gamma_auth(chs : State<ConstState>,mut cookies: Cookies, code : &RawStr, stat
     cookies.add_private(Cookie::new("challenge_selector",format!("{}",challenge_qa_selector)));
     Ok(Redirect::to("/"))
 }
+*/
 
 #[get("/logout")]
 fn logout(mut cookies : Cookies) -> Redirect {
@@ -233,18 +288,28 @@ fn logout(mut cookies : Cookies) -> Redirect {
 
 struct ConstState{
     challenges : Challenges,
-    oauth      : oauth2::basic::BasicClient,
+    groups     : HashSet<String>,
+    oauth      : Option<oauth2::basic::BasicClient>,
 }
 
 fn main() {
 
-    let gamma_client = gamma::init_gamma();
+    //let gamma_client = gamma::init_gamma();
+
+    let mut groups = HashSet::new();
+    groups.insert("INCA".to_string());
+    groups.insert("FightHubb".to_string());
+    groups.insert("Dansbandsteknologerna".to_string());
+    groups.insert("Gyllenetider".to_string());
+    groups.insert("Kanal5".to_string());
+    groups.insert("Thomas".to_string());
+    groups.insert("FaroZon".to_string());
 
     rocket::ignite()
 	    .attach(Template::fairing())
 	    .attach(UserRecordsConn::fairing())
-      .manage(ConstState{ challenges : load_challenges("test_challenges"), oauth : gamma_client})
-	    .mount("/", routes![index,index_redirect,records,challenges,challenges_redirect,gamma_auth,get_challenge,get_challenge_redirect,get_challenge_scenario,get_challenge_scenario_redirect,check_answer,logout])
+      .manage(ConstState{ challenges : load_challenges("test_challenges"), groups : groups, oauth : None})
+	    .mount("/", routes![login,login_group,phadder_grupp,index,index_redirect,records,challenges,challenges_redirect,get_challenge,get_challenge_redirect,get_challenge_scenario,get_challenge_scenario_redirect,check_answer,logout])
       .mount("/static", StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")))
       .launch();
 

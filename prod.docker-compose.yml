@@ -1,31 +1,20 @@
-version: '3.7'
+version: '2'
 services:
-    hackit:
-        build: hackIT
-        environment:
-            - GAMMA_CLIENT_ID
-            - GAMMA_CLIENT_SECRET
-            - GAMMA_AUTH_URL
-            - GAMMA_TOKEN_URL
-        ports:
-            - 80:8000
-        networks:
-            - hackit
-        
-    postgresql: 
-        image: postgres:12.3-alpine
-        environment:
-            - POSTGRES_USER
-            - POSTGRES_PASSWORD
-            - POSTGRES_DB
-        networks:
-            - hackit
-
-    adminer:
-        image: adminer
-        ports:
-            - 8080:8080
-        depends_on:
-            - postgresql
-        networks:
-            - hackit
+  hackit:
+    build:
+        context: ./hackIT
+        dockerfile: prod.Dockerfile
+    environment:
+      DATABASE_URL: postgres://user:pass@postgresql/hackit
+      ROCKET_DATABASES: '{hackit={url="postgres://user:pass@postgresql/hackit"}}'
+    ports:
+        - 8000:8000
+    
+  postgresql:
+    image: postgres:12.3-alpine
+    environment:
+      POSTGRES_DB: hackit
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: user
+    volumes:
+    - /var/lib/postgresql/data

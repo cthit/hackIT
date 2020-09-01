@@ -7,8 +7,11 @@
   <body>
     <div class="wrapper">
       <h1 id="background">Welcome to hack_IT!</h1>
-      <p>to acces the challenges, please log in on gamma!</p>
-      <a href="{{auth_url}}"> [=LOGIN=] </a>
+      {% if group_name %}
+        <p> To login as {{group_name}} click <a href="/login/{{group_name}}"> [Here] </a></p>
+      {% else %}
+        <p> to start press <a href="/login/player"> [Here] </a> </p>
+      {% endif %}
     </div>
 
   </body>
