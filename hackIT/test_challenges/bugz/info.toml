@@ -2,36 +2,36 @@ id = "bugz"
 lvl = 1
 name = "Too many bugs to count!"
 desc = '''
-Disaster in entomologist smurfs labrotory!
-
+Disaster in Entomologist Smurfs laboratory!
+ 
 A large amount of toxic insects broke out of their
-enclousers, threating the neighbouring preschool!
-
-Thankfuly the smurfs acted fast and captured all
+enclosures, threatening the neighbouring preschool!
+ 
+Thankfully the smurfs acted fast and captured all
 of the bugs in one large bucket.
-
-But did they realy capture all of them? Help the smurfs
+ 
+But did they really capture all of them? Help the smurfs
 write a program to check!
 ''' 
 spec = '''
 There are four species of insects to count:
-    Bullet (A)nts
-    (G)iant Japanese Hornets
-    Deathstalker S(C)orpion
-    Sri Lanka Ornamental (T)arantula
-
-Given a newline seperated list of letters
-find the total of each speicies in the format
-An,Cn,Gn,Tn where "n" is an integer 
+   Bullet (A)nts
+   (G)iant Japanese Hornets
+   Deathstalker S(C)orpion
+   Sri Lanka Ornamental (T)arantula
+ 
+Given a newline separated list of letters
+find the total of each species in the format
+An,Cn,Gn,Tn where "n" is an integer
 example:
-    (input)
-    A
-    C
-    C
-    G
-    A
-    (output)
-    A2,C2,G1,T0
+   (input)
+   A
+   C
+   C
+   G
+   A
+   (output)
+   A2,C2,G1,T0
 '''
 scen = [
     ["1.q","1.a"],

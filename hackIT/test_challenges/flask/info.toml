@@ -2,56 +2,57 @@ id = "flask"
 lvl = 3
 name = "Alchemy is the art of inequivalent exchange"
 desc = '''
-Times are rough for alchemist smurf.
-
+Times are rough for Alchemist Smurf.
+ 
 His latest round of experiments have failed to show results
 and his main investor (gullible smurf) is starting to
 doubt that one can convert apples to smurf gold...
-
-However all is not lost! After serveral nights of inhaling
-toxic fumes, and a pinch of sleep deprivation, he has finaly
+ 
+However all is not lost! After several nights of inhaling
+toxic fumes, and a pinch of sleep deprivation, he has finally
 cracked the code to not only transmutation of smurf gold
-but to imortaility itself!
-
+but to immortality itself!
+ 
 There is one catch.
-
+ 
 He only has a couple of potions and cans of fuel left.
-This means he has devies a plan to transmute his inventory
+This means he needs a plan to transmute his inventory
 to the ingredients he needs in as few steps as possible to
 avoid running out of fuel.
-
+ 
 this is where you come in!
 '''
 spec = '''
 In smurf alchemy there are 4 main ingredients:
-    (R)ed potion,
-    (G)reen potion,
-    (B)lue potion,
-    (Y)ellow Potion
-
+   (R)ed potion,
+   (G)reen potion,
+   (B)lue potion,
+   (Y)ellow Potion
+ 
 These potions can be transmuted to other potions according to these rules:
-    R -> G + B
-    G -> B
-    B -> G
-    B -> 2R
-    R + G -> Y
-    R + Y -> 2B
-    G + B -> 3R
-
-To acheive imortality, Alchemist smurf needs the ingerdients:
-    2R, 3G, 2B, and 4Y
-
+   R -> G + B
+   G -> B
+   B -> G
+   B -> 2R
+   R + G -> Y
+   R + Y -> 2B
+   G + B -> 3R
+ 
+To achieve immortality, Alchemist smurf needs the ingredients:
+   2R, 3G, 2B, and 4Y
+ 
 Your goal is to find the least amount of steps needed to transmute alchemist smurf's inventory to the
 ingredients needed.
-
+ 
 the answer is the amount of steps needed
-
+ 
 example:
-    (input)
-    1R 1G 1B 0Y
-    (output)
-    18
-    '''
+   (input)
+   1R 1G 1B 0Y
+   (output)
+   18
+'''
+
 scen = [
     ["1.q","1.a"],
     ["2.q","2.a"],
