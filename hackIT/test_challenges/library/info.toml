@@ -1,0 +1,22 @@
+id = "library"
+lvl = 2
+name = "quiet in the library"
+desc = '''
+The library in smurftown has a lot of smurf books, one of the more popular ones is smurfy potter and the prisoner of zmurfaban.
+Library smurf got curious at a certain chapter and wondered. How many words in that chapter started with the letter R.
+but library smurf is busy and counting them for hand would take too long. Help library smurf count the number of words that start with r!
+    '''
+spec = '''
+Read the input so that the output will spit out the number of words that starts with the letter R. remember both lower and upper cased
+r
+
+example
+    input
+    (Rory the racer car raced along a racetrack in Russia)
+    output
+    (5)
+    
+    '''
+scen = [
+    ["1.q","1.a"],
+]

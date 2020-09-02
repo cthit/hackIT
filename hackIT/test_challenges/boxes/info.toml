@@ -1,0 +1,27 @@
+id = "boxes"
+lvl = 2
+name = "box managment"
+desc = '''
+in Smurftown, there is a three different mushroom species, addungus, multifungus and shroomtract. In order to brew the perfect potion, one needs to either add, multiply
+or subtract the mushshrooms with the others in the same species to be able to calculate the perfect value. But there are so many 
+mushrooms after the harvest. Please help farmer smurf to calculate the toalt of all the mushrooms
+    '''
+spec = '''
+Make a function that takes an array and + - or * as an input and does the operation between all elements
+addungus = + (addition)
+multifungus = * (times)
+shroomtract = - (subtract)
+
+example
+    input
+    ([1, 5, 10, 12] addungus)
+    ([2, 5,3] multifungus)
+    ([10, 5,2]shroomtract)
+    output
+    (28, 30, -100)
+    
+    '''
+scen = [
+    ["1.q","1.a"],
+    ["2.q","2.a"]
+]
