@@ -21,7 +21,7 @@ One Death Eater confidently kisses another Death Eater on the cheek, and the oth
 The Death Eaters went over their plan to strip Harry of his magic, and Harry could tell that the Dark Lord was standing behind him
 Overreacting, Harry ripped his eyes out of his head (much to Voldemort's confusion), threw them into the Forbidden Forest, and told Voldemort off
 Meanwhile, Hermoine dipped the face a tall Death Eater, who was wearing a shirt that said 'Hermione Has Forgotten How to Dance'
-Ron threw a wand at the Dark Lord while everyone applauded, then slowly reached for his own while Harry, as he muttered 'Ron's the handsome one', reluctantly did the same
+Ron threw a wand at the Dark Lord while everyone applauded, then slowly reached for his own while Harry, as he muttered Ron's the handsome one', reluctantly did the same
 They cast a spell or two while green light shot out of the heads of the Death Eaters, causing Ron to afterwards
 Harry thought 'Not so handsome now' as he dipped Hermoine in hot sauce.
 
