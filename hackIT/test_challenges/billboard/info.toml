@@ -1,0 +1,24 @@
+id = "billboard"
+lvl = 2
+name = "Billboard text"
+desc = '''
+Smurftown is going get their own billboard, and Adsmurf needs your help on deciding which word to choose for the ad. The billboard is equipped with a wide array of 7-seg displays for displaying scrolling text.
+Adsmurf want's to put up the longest word known to Smurfs, but not all words can be written on the display.
+'''
+spec = '''
+Take the list of smurf words and return the longest word that can be written on the 7-seg displays.
+
+Letters that can be written are: "AbcdEFGHIJLnoPrUZ".
+
+example
+    (input)
+    fungiplace
+    smurftastic
+    shromtown
+    (output)
+    fungiplace
+'''
+scen = [
+    ["1.q","1.a"],
+    ["2.q","2.a"]
+]
