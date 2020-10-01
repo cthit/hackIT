@@ -11,6 +11,6 @@ In this challenge a message is encoded in the least significant bit of the red b
 The first pixel contains the most significant bit of the message. The first bit is in the top left pixel, the next bit is in the pixel right of the first one, and so on.
 '''
 scen = [
-    ["1q.png","1qa.txt"],
-    ["2qq.png","2a.txt"],
+    ["1q.png","1a.txt"],
+    ["2q.png","2a.txt"],
 ]
