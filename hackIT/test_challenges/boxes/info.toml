@@ -22,6 +22,6 @@ example
     
     '''
 scen = [
-    ["1.q","1.a"],
-    ["2.q","2.a"]
+    ["1q.txt","1a.txt"],
+    ["2q.txt","2a.txt"]
 ]

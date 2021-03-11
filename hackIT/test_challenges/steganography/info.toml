@@ -1,0 +1,16 @@
+id = "steganography"
+lvl = 3
+name = "Steganograsmurfs secret"
+desc = '''
+Steganograsmurf has a secret message for you. It's so secret it's hidden in an image!
+Download the image and learn the secret.
+'''
+spec = '''
+Steganography is the practice of hiding messages in images.
+In this challenge a message is encoded in the least significant bit of the red byte of each pixel.
+The first pixel contains the most significant bit of the message. The first bit is in the top left pixel, the next bit is in the pixel right of the first one, and so on.
+'''
+scen = [
+    ["1q.png","1a.txt"],
+    ["2q.png","2a.txt"],
+]

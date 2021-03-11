@@ -15,7 +15,7 @@ use std::path::PathBuf;
         name: "count with me!",
         desc: "Help the count count numbers! please count to n",
         spec: "Answere in the format 1,2,..,n",
-        scen: vec!(("10","1,2,3,4,5,6,7,8,9,10")),
+        scen: vec!((r"\imaginary\path\to\1q.txt","1,2,3,4,5,6,7,8,9,10")),
     };
 ```
 */
@@ -82,16 +82,16 @@ fn load_qa_files(root: &PathBuf, qa_files: &[(String, String)]) -> Vec<(String, 
         let q_path = root.with_file_name(q_file);
         let a_path = root.with_file_name(a_file);
 
-        let q = read_to_string(&q_path);
+        let q = q_path.to_str();
         let a = read_to_string(&a_path);
 
         match (q, a) {
-            (Ok(q), Ok(a)) => qa.push((q.to_string(), a.to_string())),
+            (Some(q), Ok(a)) => qa.push((q.to_string(), a.to_string())),
             _ => {
                 eprintln!(
-                    "[Warning] load_qa_files could not load files {},{}",
-                    q_path.to_str().unwrap(),
-                    a_path.to_str().unwrap()
+                    "[Warning] load_qa_files could not load files {:?},{:?}",
+                    q_path,
+                    a_path,
                 );
                 continue;
             }
@@ -145,7 +145,7 @@ mod tests {
             desc: "This ... is requiem".to_string(),
             spec: "The answere is the input repeated on 8 rows".to_string(),
             scen: vec![(
-                "whaa\n".to_string(),
+                r"\imaginary\path\to\1q.txt".to_string(),
                 "whaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\n".to_string(),
             )],
         };
@@ -170,7 +170,7 @@ mod tests {
             desc: "This ... is requiem".to_string(),
             spec: "The answere is the input repeated on 8 rows".to_string(),
             scen: vec![(
-                "whaa\n".to_string(),
+                r"\imaginary\path\to\1q.txt".to_string(),
                 "whaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\nwhaa\n".to_string(),
             )],
         };

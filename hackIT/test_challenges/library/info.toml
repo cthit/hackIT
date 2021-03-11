@@ -18,5 +18,5 @@ example
     
     '''
 scen = [
-    ["1.q","1.a"],
+    ["1q.txt","1a.txt"],
 ]

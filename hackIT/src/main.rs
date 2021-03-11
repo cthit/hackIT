@@ -7,7 +7,7 @@ use serde::Serialize;
 
 use rocket::{State,Outcome};
 use rocket::http::{Cookie, Cookies, RawStr, Status};
-use rocket::response::{Flash, Redirect};
+use rocket::response::{Flash, NamedFile, Redirect};
 use rocket::request::{Form,FlashMessage,Request,FromRequest};
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
@@ -155,11 +155,16 @@ fn check_answer(cs : State<ConstState>, conn : UserRecordsConn, user : User, id 
 }
 
 #[get("/challenges/<id>/scenario")]
-fn get_challenge_scenario(cs : State<ConstState>, user : User, id : &RawStr) -> Option<String>{
+fn get_challenge_scenario(cs : State<ConstState>, user : User, id : &RawStr) -> Option<NamedFile>{
     let challenge = cs.challenges.get(&id.to_string())?;
 
     let (q,_) = challenge::get_qa(user.challenge_selector,&challenge);
-    Some(q.to_string())
+    if let Ok(file) = NamedFile::open(&q) {
+        Some(file)
+    } else {
+        eprintln!("[Warning] get_challenge_scenario could not load question file {}", q);
+        None
+    }
 }
 
 #[get("/challenges/<_id>/scenario", rank = 2)]
